@@ -1,0 +1,17 @@
+@font-face {
+    font-family: 'Aardvark Cafe';
+    src: local('Aardvark Cafe');
+    src: url(../font/AardvarkCafe/AardvarkCafe.eot?v=3.2.1);
+    src: url(../font/AardvarkCafe/AardvarkCafe.eot?#iefix&v=3.2.1) format('embedded-opentype'), url(../font/AardvarkCafe/AardvarkCafe.woff?v=3.2.1) format('woff'), url(../font/AardvarkCafe/AardvarkCafe.ttf?v=3.2.1) format('truetype'), url(../font/AardvarkCafe/AardvarkCafe.svg#fontawesomeregular?v=3.2.1) format('svg');
+    font-weight: 400;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'American Purpose';
+    src: local('American Purpose');
+    src: url(../font/AmericanPurpose/AmericanPurpose.eot?v=3.2.1);
+    src: url(../font/AmericanPurpose/AmericanPurpose.eot?#iefix&v=3.2.1) format('embedded-opentype'), url(../font/AmericanPurpose/AmericanPurpose.woff?v=3.2.1) format('woff'), url(../font/AmericanPurpose/AmericanPurpose.ttf?v=3.2.1) format('truetype'), url(../font/AmericanPurpose/AmericanPurpose.svg#fontawesomeregular?v=3.2.1) format('svg');
+    font-weight: 400;
+    font-style: normal
+}
