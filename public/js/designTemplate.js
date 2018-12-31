@@ -6,7 +6,7 @@ fabric.Object.prototype.set({
 });
 
 //Design template module
-var DesignTemplate = (function () {
+var DesignTemplate = (function() {
     return {
         canvas: null,
 
@@ -14,25 +14,78 @@ var DesignTemplate = (function () {
 
         defaultWidth: 600,
 
+        designTexts: [],
+
+        designFontFamily: "American Purpose",
+
         //creates the canvas with specified height and width
-        createCanvas: function (canvasId) {
+        createCanvas: function(canvasId) {
             if (!canvasId || !document.getElementById(canvasId))
                 throw new Error('Canvas element not found');
-            this.canvas = new fabric.Canvas(canvasId, {
+            this.canvas = new fabric.StaticCanvas(canvasId, {
                 height: this.defaultHeight,
-                width: this.defaultWidth
+                width: this.defaultWidth,
+                selection: false,
+                renderOnAddRemove: false
             });
             return this.canvas;
         },
 
-        addDesign: function (url) {
+        addDesign: function(options, callback) {
             var self = this;
-            fabric.loadSVGFromURL(url, function (objects) {
-                var group = new fabric.Group(objects);
+            fabric.loadSVGFromURL(options.url, function(objects) {
+                objects.filter(function(obj) {
+                    if (obj.type === "text") {
+                        if (self.designTexts.indexOf(obj.text) == -1) {
+                            obj.id = self.designTexts.length + 1;
+                            self.designFontFamily = obj.fontFamily;
+                            self.designTexts.push(obj.text);
+                        }
+                    }
+                });
+                //loadFonts(self.designFontFamily, function() {
+                var group = fabric.util.groupSVGElements(objects, {
+                    width: options.width,
+                    height: options.height,
+                    selectable: false
+                });
+                (options.height >= options.width) ? group.scaleToHeight(self.canvas.getHeight()): group.scaleToWidth(self.canvas.getWidth());
+                self.canvas.centerObject(group);
                 self.canvas.add(group);
                 self.canvas.renderAll();
+                callback && callback({
+                    fontFamily: self.designFontFamily,
+                    texts: self.designTexts
+                });
+                // }, function() {
+                //     alert('Unable to load fonts');
+                // });
             });
+        },
+
+        changeText: function(id, text) {
+            var group = this.canvas.getObjects()[0];
+            group.getObjects().filter(function(obj) {
+                if (obj.type == "text" && obj.id == id) {
+                    obj.text = text;
+                }
+            });
+            group.set('dirty', true);
+            this.canvas.renderAll();
+        },
+
+        changeFontFamily: function(fontFamily) {
+            var group = this.canvas.getObjects()[0];
+            group.getObjects().filter(function(obj) {
+                if (obj.type == "text") {
+                    obj.fontFamily = fontFamily;
+                }
+            });
+            group.set('dirty', true);
+            this.canvas.renderAll();
         }
+
+
 
 
     }
