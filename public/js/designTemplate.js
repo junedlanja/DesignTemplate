@@ -36,10 +36,13 @@ var DesignTemplate = (function() {
             fabric.loadSVGFromURL(options.url, function(objects) {
                 objects.filter(function(obj) {
                     if (obj.type === "text") {
-                        if (self.designTexts.indexOf(obj.text) == -1) {
+                        var index = self.designTexts.indexOf(obj.text);
+                        if (index == -1) {
                             obj.id = self.designTexts.length + 1;
                             self.designFontFamily = obj.fontFamily;
                             self.designTexts.push(obj.text);
+                        }else {
+                            obj.id = index + 1;
                         }
                     }
                 });
