@@ -8,3 +8,10 @@ canvas {
     border: 2px dashed #ccc;
     margin: 6px;
 }
+
+#loader {
+	padding: 10px;
+    background: #66e3ff;
+    border-radius: 10px;
+    margin: 10px;
+}
