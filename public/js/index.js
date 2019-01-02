@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    $("#loader").html("Loading...");
+
     var desingURL = 'designs/dino/Dino-Examples-01.svg';
     //var desingURL = 'designs/test.svg';
 
@@ -10,6 +12,7 @@ $(document).ready(function () {
     	width : 268,
     	height : 210
     }, function(designInfo) {
+        $("#loader").html("Ready to desing !!!");
     	var texts = designInfo.texts;
     	for (var i = 0; i < texts.length; i++) {
     		$("#design-text-container").append('<input id="' + (i+1) +'" class="design-text" type="text" value="' + texts[i] + '"/>');
