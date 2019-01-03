@@ -1,8 +1,9 @@
 $(document).ready(function () {
     $("#loader").html("Loading...");
 
-    var desingURL = 'designs/dino/Dino-Examples-01.svg';
+    //var desingURL = 'designs/dino/Dino-Examples-01.svg';
     //var desingURL = 'designs/test.svg';
+    var desingURL = 'designs/Dino_Standard_Label_20x50mm_Examples-01.svg';
 
     //intialize design template by creating canvas
     DesignTemplate.createCanvas('canvas');
