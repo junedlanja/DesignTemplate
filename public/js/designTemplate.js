@@ -46,7 +46,7 @@ var DesignTemplate = (function() {
                         }
                     }
                 });
-                //loadFonts(self.designFontFamily, function() {
+              loadFonts(self.designFontFamily, function() {
                 var group = fabric.util.groupSVGElements(objects, {
                     width: options.width,
                     height: options.height,
@@ -60,9 +60,9 @@ var DesignTemplate = (function() {
                     fontFamily: self.designFontFamily,
                     texts: self.designTexts
                 });
-                // }, function() {
-                //     alert('Unable to load fonts');
-                // });
+              }, function() {
+                  alert('Unable to load fonts');
+              });
             });
         },
 
