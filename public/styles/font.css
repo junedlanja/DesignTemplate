@@ -15,3 +15,66 @@
     font-weight: 400;
     font-style: normal
 }
+
+@font-face {
+    font-family: 'Avenir';
+    src: local('Avenir');
+    src: url(../font/Avenir/Avenir.eot?v=3.2.1);
+    src: url(../font/Avenir/Avenir-Roman.ttf?v=3.2.1) format('truetype');
+    font-weight: 400;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'AvenirNextCondensed';
+    src: local('AvenirNextCondensed');
+    src: url(../font/AvenirNextCondensed/AvenirNextCondensed-Regular.eot?v=3.2.1);
+    src: url(../font/AvenirNextCondensed/AvenirNextCondensed-Regular.ttf?v=3.2.1) format('truetype');
+    font-weight: 400;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'BebasNeue';
+    src: local('BebasNeue');
+    src: url(../font/BebasNeue/BebasNeue.eot?v=3.2.1);
+    src: url(../font/BebasNeue/BebasNeue.ttf?v=3.2.1) format('truetype');
+    font-weight: 400;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'GiveYouGlory';
+    src: local('GiveYouGlory');
+    src: url(../font/GiveYouGlory/GiveYouGlory.eot?v=3.2.1);
+    src: url(../font/GiveYouGlory/GiveYouGlory.ttf?v=3.2.1) format('truetype');
+    font-weight: 400;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'HelveticaRounded';
+    src: local('HelveticaRounded');
+    src: url(../font/HelveticaRounded/HelveticaRounded.eot?v=3.2.1);
+    src: url(../font/HelveticaRounded/HelveticaRounded.ttf?v=3.2.1) format('truetype');
+    font-weight: 400;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'RachoRegular';
+    src: local('RachoRegular');
+    src: url(../font/RachoRegular/RachoRegular.eot?v=3.2.1);
+    src: url(../font/RachoRegular/RachoRegular.ttf?v=3.2.1) format('truetype');
+    font-weight: 400;
+    font-style: normal
+}
+
+@font-face {
+    font-family: 'Rockwell';
+    src: local('Rockwell');
+    src: url(../font/Rockwell/Rockwell.eot?v=3.2.1);
+    src: url(../font/Rockwell/Rockwell-Regular.ttf?v=3.2.1) format('truetype');
+    font-weight: 400;
+    font-style: normal
+}
