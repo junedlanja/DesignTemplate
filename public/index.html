@@ -13,6 +13,9 @@
     <head>
         <!-- css | Bootstrap 4.0.0 -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
+        <!-- css | Bootstrap colorpicker 2.5.3 -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css"
+            crossorigin="anonymous">
         <!-- css | Our application css -->
         <link rel="stylesheet" href="./styles/app.css" />
         <!-- css | Our fonts css -->
@@ -27,18 +30,17 @@
                 <canvas id="canvas"></canvas>
             </div>
             <div class="col-sm-5">
-                <div id="design-text-container"></div>
                 <select class="form-control" id="font-family">
-                    <option value="American Purpose">American Purpose</option>
-                    <option value="Aardvark Cafe">Aardvark Cafe</option>
-                    <option value="Avenir">Avenir</option>
-                    <option value="AvenirNextCondensed">AvenirNextCondensed</option>
-                    <option value="BebasNeue">BebasNeue</option>
-                    <option value="GiveYouGlory">GiveYouGlory</option>
-                    <option value="HelveticaRounded">HelveticaRounded</option>
-                    <option value="RachoRegular">RachoRegular</option>
-                    <option value="Rockwell">Rockwell</option>
+                    <option value="Avenir" style="font-family:'Avenir'">Avenir</option>
+                    <option value="AvenirNextCondensed" style="font-family:'AvenirNextCondensed'">AvenirNextCondensed</option>
+                    <option value="BebasNeue" style="font-family:'BebasNeue'">BebasNeue</option>
+                    <option value="GiveYouGlory" style="font-family:'GiveYouGlory'">GiveYouGlory</option>
+                    <option value="HelveticaRounded" style="font-family:'HelveticaRounded'">HelveticaRounded</option>
+                    <option value="RachoRegular" style="font-family:'RachoRegular'">RachoRegular</option>
+                    <option value="Rockwell" style="font-family:'Rockwell'">Rockwell</option>
                 </select>
+                <div id="design-text-container"></div>
+                <div id="design-color-container"></div>
             </div>
         </div>
     </div>
@@ -47,6 +49,9 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
     <!-- js | bootstrap 4.0.0 -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <!-- css | Bootstrap colorpicker 2.5.3 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/js/bootstrap-colorpicker.min.js"
+        crossorigin="anonymous"></script>
     <!-- js | fabric 2.4.3 | Library to intract with canvas -->
     <script type="text/javascript" src="./js/fabric.js"></script>
     <!-- js | webfont 1.6.26 | Library to load fonts -->

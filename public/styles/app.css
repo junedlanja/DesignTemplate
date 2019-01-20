@@ -10,8 +10,23 @@ canvas {
 }
 
 #loader {
-	padding: 10px;
+    padding: 10px;
     background: #66e3ff;
     border-radius: 10px;
     margin: 10px;
+}
+
+#font-family,
+#design-text-container,
+#design-text-container input,
+#design-color-container {
+    margin: 5px;
+}
+
+#design-color-container span {
+    display: inline-block;
+    border: 1px solid black;
+    height: 30px;
+    width: 30px;
+    margin: 5px;
 }
