@@ -1,3 +1,22 @@
+function renderTextOptions() {
+	$("#design-text-container").empty();
+	var texts = DesignTemplate.designTexts;
+	for (var i = 0; i < texts.length; i++) {
+		$("#design-text-container").append('<input id="' + (i + 1) + '" class="design-text" type="text" max-length="' + DesignTemplate.maxTextLength + '" value="' + texts[i] + '"/>');
+	}
+}
+
+function renderColorOptions() {
+	$("#design-color-container").empty();
+	var colors = DesignTemplate.textObjectInfo.map(function (obj) {
+		return obj.fill;
+	});
+	for (var i = 0; i < colors.length; i++) {
+		$("#design-color-container").append('<span id="color-' + (i + 1) + '" data-id="' + i + '" class="design-color" style="background-color:' + colors[i] + '"/>');
+	}
+	$('.design-color').colorpicker();
+}
+
 $(document).ready(function () {
 	$("#loader").html("Loading...");
 
@@ -5,26 +24,14 @@ $(document).ready(function () {
 	//var desingURL = 'designs/test.svg';
 	var desingURL = 'designs/Dino_Standard_Label_20x50mm_Examples-01.svg';
 
-	//intialize design template by creating canvas
 	DesignTemplate.createCanvas('canvas');
 
 	DesignTemplate.addDesign({
 		url: desingURL,
-		// width: 268,
-		// height: 210
-	}, function (designInfo) {
+	}, function () {
 		$("#loader").html("Ready to desing !!!");
-		var texts = designInfo.texts;
-		var colors = designInfo.textObjectInfo.map(function (obj) {
-			return obj.fill;
-		});
-		for (var i = 0; i < texts.length; i++) {
-			$("#design-text-container").append('<input id="' + (i + 1) + '" class="design-text" type="text" max-length="' + DesignTemplate.maxTextLength + '" value="' + texts[i] + '"/>');
-		}
-		for (var i = 0; i < colors.length; i++) {
-			$("#design-color-container").append('<span id="color-' + (i + 1) + '" data-id="' + i + '" class="design-color" style="background-color:' + colors[i] + '"/>');
-		}
-		$('.design-color').colorpicker();
+		renderTextOptions();
+		renderColorOptions();
 	});
 
 	$("#design-text-container").on("input", ".design-text", function (event) {
@@ -39,7 +46,7 @@ $(document).ready(function () {
 		var fontFamily = this.value;
 		$("#font-family").css("font-family", fontFamily);
 		loadFonts(fontFamily, function () {
-			DesignTemplate.changeFontFamily(fontFamily);
+			DesignTemplate.changeFontFamily(fontFamily, renderTextOptions);
 		}, function () {
 			alert('Unable to load fonts');
 		});

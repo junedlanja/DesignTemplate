@@ -63,6 +63,7 @@ var DesignTemplate = (function () {
                         }
                         self.textObjectInfo.push({
                             canvasObj: obj,
+                            text: obj.text,
                             width: obj.width,
                             height: obj.height,
                             scaleX: obj.scaleX,
@@ -85,7 +86,7 @@ var DesignTemplate = (function () {
                     self.getMaxDimension();
                     callback && callback({
                         fontFamily: self.designFontFamily,
-                        texts: self.designTexts,
+                        designTexts: self.designTexts,
                         textObjectInfo: self.textObjectInfo
                     });
                 }, function () {
@@ -109,7 +110,7 @@ var DesignTemplate = (function () {
             this.resizeText();
         },
 
-        changeFontFamily: function (fontFamily) {
+        changeFontFamily: function (fontFamily, callback) {
             var group = this.canvas.getObjects()[0];
             // group.getObjects().filter(function (obj) {
             //     if (obj.type == "text") {
@@ -117,16 +118,17 @@ var DesignTemplate = (function () {
             //     }
             // });
             this.textObjectInfo.filter(function (obj) {
+                obj.canvasObj.text = obj.text;
                 obj.canvasObj.fontFamily = fontFamily;
             });
             group.set('dirty', true);
             this.canvas.renderAll();
-            this.resizeText();
+            this.resetTextSize(callback);
         },
 
         changeColor: function (id, color) {
-            var group = this.canvas.getObjects()[0];
             this.textObjectInfo[id].canvasObj.fill = color;
+            var group = this.canvas.getObjects()[0];
             group.set('dirty', true);
             this.canvas.renderAll();
         },
@@ -148,6 +150,22 @@ var DesignTemplate = (function () {
                 group.set('dirty', true);
                 self.canvas.renderAll();
             }
+        },
+
+        resetTextSize: function (callback) {
+            var self = this;
+            this.textObjectInfo.filter(function (obj) {
+                obj.canvasObj.scaleX = obj.scaleX;
+                obj.canvasObj.scaleY = obj.scaleY;
+                var width = obj.canvasObj.width;
+                if (width > self.maxTextWidth) {
+                    obj.canvasObj.scaleX = self.maxTextWidth / width * obj.scaleX;
+                }
+            });
+            var group = self.canvas.getObjects()[0];
+            group.set('dirty', true);
+            self.canvas.renderAll();
+            callback && callback();
         }
     }
 })();
