@@ -26,6 +26,8 @@ var DesignTemplate = (function () {
 
         designFontFamily: "Avenir",
 
+
+        //get the max width & hight upto which object will scale
         getMaxDimension: function () {
             this.maxTextWidth = Math.max.apply(null, this.textObjectInfo.map(function (obj) {
                 return obj.width;
@@ -48,10 +50,12 @@ var DesignTemplate = (function () {
             return this.canvas;
         },
 
+        //add template on the canvas
         addDesign: function (options, callback) {
             var self = this;
             fabric.loadSVGFromURL(options.url, function (objects) {
                 objects.filter(function (obj) {
+                    //collect the information of text objects
                     if (obj.type === "text") {
                         var index = self.designTexts.indexOf(obj.text);
                         if (index == -1) {
@@ -73,6 +77,8 @@ var DesignTemplate = (function () {
                         });
                     }
                 });
+
+                //load the default font used in SVG
                 loadFonts(self.designFontFamily, function () {
                     var group = fabric.util.groupSVGElements(objects, {
                         width: options.width,
@@ -95,13 +101,9 @@ var DesignTemplate = (function () {
             });
         },
 
+        //change the text
         changeText: function (id, text) {
             var group = this.canvas.getObjects()[0];
-            // group.getObjects().filter(function (obj) {
-            //     if (obj.type == "text" && obj.id == id) {
-            //         obj.text = text;
-            //     }
-            // });
             this.textObjectInfo.filter(function (obj) {
                 obj.canvasObj.id == id && (obj.canvasObj.text = text);
             });
@@ -110,22 +112,20 @@ var DesignTemplate = (function () {
             this.resizeText();
         },
 
+        //change the font family
         changeFontFamily: function (fontFamily, callback) {
             var group = this.canvas.getObjects()[0];
-            // group.getObjects().filter(function (obj) {
-            //     if (obj.type == "text") {
-            //         obj.fontFamily = fontFamily;
-            //     }
-            // });
             this.textObjectInfo.filter(function (obj) {
-                obj.canvasObj.text = obj.text;
+                //obj.canvasObj.text = obj.text;
                 obj.canvasObj.fontFamily = fontFamily;
             });
             group.set('dirty', true);
             this.canvas.renderAll();
-            this.resetTextSize(callback);
+            //this.resetTextSize(callback);
+            this.resizeText();
         },
 
+        //change text color
         changeColor: function (id, color) {
             this.textObjectInfo[id].canvasObj.fill = color;
             var group = this.canvas.getObjects()[0];
@@ -133,6 +133,11 @@ var DesignTemplate = (function () {
             this.canvas.renderAll();
         },
 
+        /* resize text to fit into the max height/width 
+          (Max height/ width is qual to the text node with max height/ width 
+            of SVG. So while designing SVG its advisable Put text node such that it will
+            cover max design area.)
+        */
         resizeText: function () {
             var self = this;
             var changed = true;
@@ -166,6 +171,13 @@ var DesignTemplate = (function () {
             group.set('dirty', true);
             self.canvas.renderAll();
             callback && callback();
+        },
+
+        //export canvas as data URL 
+        exportDesign: function () {
+            if (!this.canvas)
+                throw new Error('No canvas found');
+            return this.canvas.toDataURL();
         }
     }
 })();
