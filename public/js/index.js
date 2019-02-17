@@ -43,7 +43,12 @@ var readUploadedFile = function (file, callback) {
         };
     };
     reader.readAsDataURL(file);
-};
+}
+
+function getQueryStringValue(key) {
+    return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+}
+
 
 const cloudName = "dsoxr0nis";
 const unsignedUploadPreset = "hxay11ox";
@@ -165,7 +170,8 @@ $(document).ready(function () {
     $("#design-loader").html("Loading...");
 
     //var designURL = 'designs/Dino_Standard_Label_20x50mm_Examples-01.svg';
-    var designURL = "designs/Dino_Optimized.svg";
+
+    var designURL = getQueryStringValue("design") || "designs/Dino_Optimized.svg";
 
     //Create canvas
     DesignTemplate.createCanvas("canvas");
@@ -175,6 +181,14 @@ $(document).ready(function () {
             url: designURL
         },
         function () {
+            var firstName = getQueryStringValue("firstName");
+            var lastName = getQueryStringValue("lastName");
+            if (firstName && lastName) {
+                let texts = [firstName, lastName];
+                texts.filter(function (text, index) {
+                    DesignTemplate.changeText(index + 1, text);
+                })
+            }
             $("#design-loader").html("Ready to desing !!!");
             renderTextOptions();
             renderColorOptions();
@@ -227,5 +241,27 @@ $(document).ready(function () {
     $("#preview").on("click", function (e) {
         var src = DesignTemplate.exportDesign();
         showPreviewDetail(src);
+    });
+
+    //Change design directly without page reload
+    $("#changeDesign").on("click", function () {
+        DesignTemplate.changeDesign({
+            url: "designs/Sample_Design.svg",
+            designTexts: DesignTemplate.designTexts
+        });
+    });
+
+    //Reload design with new url and text passed in query string
+    $("#reloadDesign").on("click", function () {
+        var params = {
+            'design': 'designs/Sample_Design.svg',
+        };
+
+        window.location.href = window.location.pathname + "?" + $.param({
+            'design': 'designs/Sample_Design.svg',
+            'firstName': DesignTemplate.designTexts[0],
+            'lastName': DesignTemplate.designTexts[1]
+        })
+
     });
 });

@@ -103,9 +103,13 @@ var DesignTemplate = (function () {
 
         //change the text
         changeText: function (id, text) {
+            var self = this;
             var group = this.canvas.getObjects()[0];
             this.textObjectInfo.filter(function (obj) {
-                obj.canvasObj.id == id && (obj.canvasObj.text = text);
+                if (obj.canvasObj.id == id) {
+                    obj.canvasObj.text = text;
+                    self.designTexts[id - 1] = text;
+                }
             });
             group.set('dirty', true);
             this.canvas.renderAll();
@@ -178,6 +182,28 @@ var DesignTemplate = (function () {
             if (!this.canvas)
                 throw new Error('No canvas found');
             return this.canvas.toDataURL();
+        },
+
+        clearCanvas: function () {
+            if (!this.canvas)
+                throw new Error('No canvas found');
+            this.canvas.clear();
+            this.maxTextWidth = 0;
+            this.maxTextHeight = 0;
+            this.designTexts = [];
+            this.textObjectInfo = [];
+        },
+
+        changeDesign: function (options) {
+            var self = this;
+            this.clearCanvas();
+            this.addDesign({
+                url: options.url
+            }, function () {
+                options.designTexts.filter(function (text, index) {
+                    self.changeText(index + 1, text)
+                });
+            })
         }
     }
 })();
