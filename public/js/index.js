@@ -1,14 +1,14 @@
-function renderTextOptions() {
+function renderTextOptions(skip) {
     $("#design-text-container").empty();
     var texts = DesignTemplate.designTexts;
     for (var i = 0; i < texts.length; i++) {
         $("#design-text-container").append(
             '<input id="' +
             (i + 1) +
-            '" class="design-text" type="text" max-length="' +
+            '" class="design-text" type="text" maxlength="' +
             DesignTemplate.maxTextLength +
             '" value="' +
-            texts[i] +
+            (skip ? "" : texts[i]) +
             '"/>'
         );
     }
@@ -31,6 +31,9 @@ function selectDefaultFontFamily() {
         "selected",
         true
     );
+    var fontOption = $('#font-slider .font-option[data-font="' + defaultFontFamily + '"]');
+    fontOption.addClass("selected");
+    $("#font-slider").slick("slickGoTo", fontOption.data("slide-id"));
 }
 
 var readUploadedFile = function (file, callback) {
@@ -43,12 +46,21 @@ var readUploadedFile = function (file, callback) {
         };
     };
     reader.readAsDataURL(file);
-}
+};
 
 function getQueryStringValue(key) {
-    return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+    return decodeURIComponent(
+        window.location.search.replace(
+            new RegExp(
+                "^(?:.*[&\\?]" +
+                encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") +
+                "(?:\\=([^&]*))?)?.*$",
+                "i"
+            ),
+            "$1"
+        )
+    );
 }
-
 
 const cloudName = "dsoxr0nis";
 const unsignedUploadPreset = "hxay11ox";
@@ -169,14 +181,24 @@ function showExportFailureMsg() {
 $(document).ready(function () {
     $("#design-loader").html("Loading...");
 
+    //Initialize color picker
+    $('#product-color').colorpicker();
+
+    $("#font-slider").slick({
+        infinite: true,
+        slidesToShow: 2,
+        slidesToScroll: 2
+    });
+
     //var designURL = 'designs/Dino_Standard_Label_20x50mm_Examples-01.svg';
 
-    var designURL = getQueryStringValue("design") || "designs/Dino_Optimized.svg";
+    var designURL =
+        getQueryStringValue("design") || "designs/Dino_Optimized.svg";
 
     //Create canvas
     DesignTemplate.createCanvas("canvas");
 
-    //Add design 
+    //Add design
     DesignTemplate.addDesign({
             url: designURL
         },
@@ -187,10 +209,10 @@ $(document).ready(function () {
                 let texts = [firstName, lastName];
                 texts.filter(function (text, index) {
                     DesignTemplate.changeText(index + 1, text);
-                })
+                });
             }
             $("#design-loader").html("Ready to desing !!!");
-            renderTextOptions();
+            renderTextOptions(true);
             renderColorOptions();
             selectDefaultFontFamily();
         }
@@ -211,6 +233,24 @@ $(document).ready(function () {
         loadFonts(
             fontFamily,
             function () {
+                DesignTemplate.changeFontFamily(fontFamily, renderTextOptions);
+            },
+            function () {
+                alert("Unable to load fonts");
+            }
+        );
+    });
+
+    //change font family - slider
+    $("#font-slider .font-option").on("click", function (event) {
+        var $target = $(event.currentTarget);
+        var fontFamily = $target.data('font');
+        loadFonts(
+            fontFamily,
+            function () {
+                $("#font-slider").slick("slickGoTo", $target.data("slide-id"));
+                $("#font-slider .font-option").removeClass("selected");
+                $target.addClass("selected");
                 DesignTemplate.changeFontFamily(fontFamily, renderTextOptions);
             },
             function () {
@@ -254,14 +294,28 @@ $(document).ready(function () {
     //Reload design with new url and text passed in query string
     $("#reloadDesign").on("click", function () {
         var params = {
-            'design': 'designs/Sample_Design.svg',
+            design: "designs/Sample_Design.svg"
         };
 
-        window.location.href = window.location.pathname + "?" + $.param({
-            'design': 'designs/Sample_Design.svg',
-            'firstName': DesignTemplate.designTexts[0],
-            'lastName': DesignTemplate.designTexts[1]
-        })
-
+        window.location.href =
+            window.location.pathname +
+            "?" +
+            $.param({
+                design: "designs/Sample_Design.svg",
+                firstName: DesignTemplate.designTexts[0],
+                lastName: DesignTemplate.designTexts[1]
+            });
     });
+
+    $('#product-color').on('changeColor', function (event) {
+        var color = event.color.toString();
+        $('.selected-product-color').css('background-color', color);
+        DesignTemplate.changeBackgroundColor(color);
+    });
+
+    $('#product-color-panel').on('click', '.color-option', function (e) {
+        var color = $(e.currentTarget).data('color');
+        $('.selected-product-color').css('background-color', color);
+        DesignTemplate.changeBackgroundColor(color);
+    })
 });

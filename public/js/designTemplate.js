@@ -10,6 +10,8 @@ var DesignTemplate = (function () {
     return {
         canvas: null,
 
+        backgroundColor: '#000',
+
         defaultHeight: 600,
 
         defaultWidth: 600,
@@ -28,13 +30,17 @@ var DesignTemplate = (function () {
 
 
         //get the max width & hight upto which object will scale
-        getMaxDimension: function () {
+        getDimension: function () {
             this.maxTextWidth = Math.max.apply(null, this.textObjectInfo.map(function (obj) {
                 return obj.width;
             }));
             this.maxTextHeight = Math.max.apply(null, this.textObjectInfo.map(function (obj) {
                 return obj.height;
             }));
+            this.textObjectInfo.filter(function (obj) {
+                obj.left = obj.canvasObj.left;
+                obj.top = obj.canvasObj.top;
+            })
         },
 
         //creates the canvas with specified height and width
@@ -45,7 +51,8 @@ var DesignTemplate = (function () {
                 height: this.defaultHeight,
                 width: this.defaultWidth,
                 selection: false,
-                renderOnAddRemove: false
+                renderOnAddRemove: false,
+                backgroundColor: this.backgroundColor
             });
             return this.canvas;
         },
@@ -68,12 +75,16 @@ var DesignTemplate = (function () {
                         self.textObjectInfo.push({
                             canvasObj: obj,
                             text: obj.text,
-                            width: obj.width,
-                            height: obj.height,
+                            // width: obj.width,
+                            // height: obj.height,
+                            width: obj.getScaledWidth(),
+                            height: obj.getScaledHeight(),
                             scaleX: obj.scaleX,
                             scaleY: obj.scaleY,
                             fill: obj.fill,
-                            stroke: obj.stroke
+                            stroke: obj.stroke,
+                            top: obj.top,
+                            left: obj.left
                         });
                     }
                 });
@@ -86,10 +97,11 @@ var DesignTemplate = (function () {
                         selectable: false
                     });
                     (options.height >= options.width) ? group.scaleToHeight(self.canvas.getHeight()): group.scaleToWidth(self.canvas.getWidth());
+                    group.scale(0.7);
                     self.canvas.centerObject(group);
                     self.canvas.add(group);
                     self.canvas.renderAll();
-                    self.getMaxDimension();
+                    self.getDimension();
                     callback && callback({
                         fontFamily: self.designFontFamily,
                         designTexts: self.designTexts,
@@ -113,7 +125,7 @@ var DesignTemplate = (function () {
             });
             group.set('dirty', true);
             this.canvas.renderAll();
-            this.resizeText();
+            this.resizeText(id);
         },
 
         //change the font family
@@ -126,7 +138,10 @@ var DesignTemplate = (function () {
             group.set('dirty', true);
             this.canvas.renderAll();
             //this.resetTextSize(callback);
-            this.resizeText();
+            this.designTexts.filter(function (text, index) {
+                this.resizeText(index + 1);
+            });
+            // this.resizeText();
         },
 
         //change text color
@@ -142,23 +157,28 @@ var DesignTemplate = (function () {
             of SVG. So while designing SVG its advisable Put text node such that it will
             cover max design area.)
         */
-        resizeText: function () {
+        resizeText: function (id) {
             var self = this;
-            var changed = true;
+            // var changed = true;
             this.textObjectInfo.filter(function (obj) {
-                var width = obj.canvasObj.width;
-                var ratio = self.maxTextWidth / width;
-                if (width > self.maxTextWidth) {
-                    changed = true;
-                    obj.canvasObj.scaleX = ratio * obj.scaleX;
-                    obj.canvasObj.scaleY = ratio * obj.scaleY;
+                if (obj.canvasObj.id == id) {
+                    var width = obj.canvasObj.width;
+                    var ratio = self.maxTextWidth / width;
+                    if (width > self.maxTextWidth) {
+                        //changed = true;
+                        obj.canvasObj.scaleToWidth(self.maxTextWidth);
+                        // obj.canvasObj.scaleX = ratio * obj.scaleX;
+                        obj.canvasObj.scaleY = ratio * obj.scaleY;
+                    }
+                    obj.canvasObj.left = obj.left + (obj.width / 2) - (obj.canvasObj.getScaledWidth() / 2);
                 }
             });
-            if (changed) {
-                var group = self.canvas.getObjects()[0];
-                group.set('dirty', true);
-                self.canvas.renderAll();
-            }
+            // if (changed) {
+            var group = self.canvas.getObjects()[0];
+            group.set('dirty', true);
+            self.canvas.backgroundColor = self.canvas.backgroundColor;
+            self.canvas.renderAll();
+            // }
         },
 
         resetTextSize: function (callback) {
@@ -204,6 +224,11 @@ var DesignTemplate = (function () {
                     self.changeText(index + 1, text)
                 });
             })
+        },
+
+        changeBackgroundColor: function (color) {
+            this.canvas.backgroundColor = color;
+            this.canvas.renderAll()
         }
     }
 })();

@@ -20,6 +20,10 @@
         <link rel="stylesheet" href="./styles/app.css" />
         <!-- css | Our fonts css -->
         <link rel="stylesheet" href="./styles/font.css" />
+        <!-- css | slick slider -->
+        <link rel="stylesheet" type="text/css" href="plugin/slick/slick.css" />
+        <!-- Add the new slick-theme.css if you want the default styling -->
+        <link rel="stylesheet" type="text/css" href="plugin/slick/slick-theme.css" />
     </head>
 
 <body>
@@ -30,7 +34,7 @@
                 <canvas id="canvas"></canvas>
             </div>
             <div class="col-sm-5">
-                <select class="form-control" id="font-family">
+                <!-- <select class="form-control" id="font-family">
                     <option value="Avenir" style="font-family:'Avenir'">Avenir</option>
                     <option value="AvenirNextCondensed" style="font-family:'AvenirNextCondensed'">AvenirNextCondensed</option>
                     <option value="BebasNeue" style="font-family:'BebasNeue'">BebasNeue</option>
@@ -38,7 +42,27 @@
                     <option value="HelveticaRounded" style="font-family:'HelveticaRounded'">HelveticaRounded</option>
                     <option value="RachoRegular" style="font-family:'RachoRegular'">RachoRegular</option>
                     <option value="Rockwell" style="font-family:'Rockwell'">Rockwell</option>
-                </select>
+                </select> -->
+                <div id="font-slider">
+                    <div class="font-option" data-slide-id="1" data-font="Avenir" style="font-family:'Avenir'">AABBCC</div>
+                    <div class="font-option" data-slide-id="2" data-font="AvenirNextCondensed" style="font-family:'AvenirNextCondensed'">AABBCC</div>
+                    <div class="font-option" data-slide-id="3" data-font="BebasNeue" style="font-family:'BebasNeue'">AABBCC</div>
+                    <div class="font-option" data-slide-id="4" data-font="GiveYouGlory" style="font-family:'GiveYouGlory'">AABBCC</div>
+                    <div class="font-option" data-slide-id="5" data-font="HelveticaRounded" style="font-family:'HelveticaRounded'">AABBCC</div>
+                    <div class="font-option" data-slide-id="6" data-font="RachoRegular" style="font-family:'RachoRegular'">AABBCC</div>
+                    <div class="font-option" data-slide-id="7" data-font="Rockwell" style="font-family:'Rockwell'">AABBCC</div>
+                </div>
+                <div class="input-group mb-3">
+                    <label for="product-color" class="mr-3">Product Color:</label>
+                    <span id="product-color" class="selected-product-color"></span>
+                </div>
+                <div id="product-color-panel" class="input-group mb-3">
+                    <label for="product-color" class="mr-3">Product Color Panel:</label>
+                    <span  class="color-option" data-color="red" style="background-color: red"></span>
+                    <span  class="color-option" data-color="green" style="background-color: green"></span>
+                    <span  class="color-option" data-color="yellow" style="background-color: yellow"></span>
+                    <span  class="color-option" data-color="blue" style="background-color: blue"></span>
+                </div>
                 <div id="design-text-container"></div>
                 <div id="design-color-container"></div>
                 <div class="form-group">
@@ -112,6 +136,8 @@
     <script src="js/designTemplate.js" crossorigin="anonymous"></script>
     <!-- js | index.js | Page UI interaction -->
     <script src="js/index.js" crossorigin="anonymous"></script>
+    <!-- js | index.js | Page UI interaction -->
+    <script type="text/javascript" src="plugin/slick/slick.min.js"></script>
 </body>
 </head>
 

@@ -67,11 +67,19 @@ canvas {
     border-radius: 12px;
 }
 
-.selected-color {
+.color-option {
+    width: 32px;
+    height: 32px;
+    margin: 0 5px;
+    cursor: pointer
+}
+
+.selected-product-color {
     width: 32px;
     height: 32px;
     margin: 0 5px;
     background-color: black;
+    cursor: pointer;
 }
 
 .loader {
@@ -126,4 +134,35 @@ canvas {
             inset #fff 0 2em 0 0,
             inset #00b7c6 0 4em 0 0;
     }
+}
+
+#font-slider {
+    font-size: 36px;
+}
+
+#font-slider div {
+    margin: 5px;
+    cursor: pointer;
+    outline: none;
+    text-align: center;
+    box-sizing: border-box;
+    border: 1px solid transparent;
+}
+
+#font-slider div.selected {
+    border: 1px solid #ccc
+}
+
+
+.slick-prev:before {
+    content: url("../plugin/slick/slider-arrow-left.png") !important;
+}
+
+.slick-next:before {
+    content: url("../plugin/slick/slider-arrow-right.png") !important;
+}
+
+.slick-prev:before,
+.slick-next:before {
+    color: #bcbec0 !important;
 }
