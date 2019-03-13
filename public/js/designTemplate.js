@@ -1,8 +1,8 @@
 //Overright deafult control colors
 fabric.Object.prototype.set({
     transparentCorners: false,
-    borderColor: '#ff00ff',
-    cornerColor: '#007bff'
+    borderColor: "#ff00ff",
+    cornerColor: "#007bff"
 });
 
 //Design template module
@@ -10,7 +10,7 @@ var DesignTemplate = (function () {
     return {
         canvas: null,
 
-        backgroundColor: '#000',
+        backgroundColor: "#000",
 
         defaultHeight: 600,
 
@@ -28,25 +28,30 @@ var DesignTemplate = (function () {
 
         designFontFamily: "Avenir",
 
-
         //get the max width & hight upto which object will scale
         getDimension: function () {
-            this.maxTextWidth = Math.max.apply(null, this.textObjectInfo.map(function (obj) {
-                return obj.width;
-            }));
-            this.maxTextHeight = Math.max.apply(null, this.textObjectInfo.map(function (obj) {
-                return obj.height;
-            }));
+            this.maxTextWidth = Math.max.apply(
+                null,
+                this.textObjectInfo.map(function (obj) {
+                    return obj.width;
+                })
+            );
+            this.maxTextHeight = Math.max.apply(
+                null,
+                this.textObjectInfo.map(function (obj) {
+                    return obj.height;
+                })
+            );
             this.textObjectInfo.filter(function (obj) {
                 obj.left = obj.canvasObj.left;
                 obj.top = obj.canvasObj.top;
-            })
+            });
         },
 
         //creates the canvas with specified height and width
         createCanvas: function (canvasId) {
             if (!canvasId || !document.getElementById(canvasId))
-                throw new Error('Canvas element not found');
+                throw new Error("Canvas element not found");
             this.canvas = new fabric.StaticCanvas(canvasId, {
                 height: this.defaultHeight,
                 width: this.defaultWidth,
@@ -90,26 +95,33 @@ var DesignTemplate = (function () {
                 });
 
                 //load the default font used in SVG
-                loadFonts(self.designFontFamily, function () {
-                    var group = fabric.util.groupSVGElements(objects, {
-                        width: options.width,
-                        height: options.height,
-                        selectable: false
-                    });
-                    (options.height >= options.width) ? group.scaleToHeight(self.canvas.getHeight()): group.scaleToWidth(self.canvas.getWidth());
-                    group.scale(0.7);
-                    self.canvas.centerObject(group);
-                    self.canvas.add(group);
-                    self.canvas.renderAll();
-                    self.getDimension();
-                    callback && callback({
-                        fontFamily: self.designFontFamily,
-                        designTexts: self.designTexts,
-                        textObjectInfo: self.textObjectInfo
-                    });
-                }, function () {
-                    alert('Unable to load fonts');
-                });
+                loadFonts(
+                    self.designFontFamily,
+                    function () {
+                        var group = fabric.util.groupSVGElements(objects, {
+                            width: options.width,
+                            height: options.height,
+                            selectable: false
+                        });
+                        options.height >= options.width ?
+                            group.scaleToHeight(self.canvas.getHeight()) :
+                            group.scaleToWidth(self.canvas.getWidth());
+                        group.scale(0.7);
+                        self.canvas.centerObject(group);
+                        self.canvas.add(group);
+                        self.canvas.renderAll();
+                        self.getDimension();
+                        callback &&
+                            callback({
+                                fontFamily: self.designFontFamily,
+                                designTexts: self.designTexts,
+                                textObjectInfo: self.textObjectInfo
+                            });
+                    },
+                    function () {
+                        alert("Unable to load fonts");
+                    }
+                );
             });
         },
 
@@ -121,9 +133,12 @@ var DesignTemplate = (function () {
                 if (obj.canvasObj.id == id) {
                     obj.canvasObj.text = text;
                     self.designTexts[id - 1] = text;
+                    //store text changes in session storage
+                    if (id == 1) sessionStorage.setItem("firstName", text);
+                    if (id == 2) sessionStorage.setItem("lastName", text);
                 }
             });
-            group.set('dirty', true);
+            group.set("dirty", true);
             this.canvas.renderAll();
             this.resizeText(id);
         },
@@ -135,7 +150,7 @@ var DesignTemplate = (function () {
                 //obj.canvasObj.text = obj.text;
                 obj.canvasObj.fontFamily = fontFamily;
             });
-            group.set('dirty', true);
+            group.set("dirty", true);
             this.canvas.renderAll();
             //this.resetTextSize(callback);
             this.designTexts.filter(function (text, index) {
@@ -148,7 +163,7 @@ var DesignTemplate = (function () {
         changeColor: function (id, color) {
             this.textObjectInfo[id].canvasObj.fill = color;
             var group = this.canvas.getObjects()[0];
-            group.set('dirty', true);
+            group.set("dirty", true);
             this.canvas.renderAll();
         },
 
@@ -170,12 +185,15 @@ var DesignTemplate = (function () {
                         // obj.canvasObj.scaleX = ratio * obj.scaleX;
                         obj.canvasObj.scaleY = ratio * obj.scaleY;
                     }
-                    obj.canvasObj.left = obj.left + (obj.width / 2) - (obj.canvasObj.getScaledWidth() / 2);
+                    obj.canvasObj.left =
+                        obj.left +
+                        obj.width / 2 -
+                        obj.canvasObj.getScaledWidth() / 2;
                 }
             });
             // if (changed) {
             var group = self.canvas.getObjects()[0];
-            group.set('dirty', true);
+            group.set("dirty", true);
             self.canvas.backgroundColor = self.canvas.backgroundColor;
             self.canvas.renderAll();
             // }
@@ -188,25 +206,24 @@ var DesignTemplate = (function () {
                 obj.canvasObj.scaleY = obj.scaleY;
                 var width = obj.canvasObj.width;
                 if (width > self.maxTextWidth) {
-                    obj.canvasObj.scaleX = self.maxTextWidth / width * obj.scaleX;
+                    obj.canvasObj.scaleX =
+                        (self.maxTextWidth / width) * obj.scaleX;
                 }
             });
             var group = self.canvas.getObjects()[0];
-            group.set('dirty', true);
+            group.set("dirty", true);
             self.canvas.renderAll();
             callback && callback();
         },
 
-        //export canvas as data URL 
+        //export canvas as data URL
         exportDesign: function () {
-            if (!this.canvas)
-                throw new Error('No canvas found');
+            if (!this.canvas) throw new Error("No canvas found");
             return this.canvas.toDataURL();
         },
 
         clearCanvas: function () {
-            if (!this.canvas)
-                throw new Error('No canvas found');
+            if (!this.canvas) throw new Error("No canvas found");
             this.canvas.clear();
             this.maxTextWidth = 0;
             this.maxTextHeight = 0;
@@ -218,17 +235,19 @@ var DesignTemplate = (function () {
             var self = this;
             this.clearCanvas();
             this.addDesign({
-                url: options.url
-            }, function () {
-                options.designTexts.filter(function (text, index) {
-                    self.changeText(index + 1, text)
-                });
-            })
+                    url: options.url
+                },
+                function () {
+                    options.designTexts.filter(function (text, index) {
+                        self.changeText(index + 1, text);
+                    });
+                }
+            );
         },
 
         changeBackgroundColor: function (color) {
             this.canvas.backgroundColor = color;
-            this.canvas.renderAll()
+            this.canvas.renderAll();
         }
-    }
+    };
 })();

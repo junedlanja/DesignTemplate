@@ -190,10 +190,14 @@ $(document).ready(function () {
         slidesToScroll: 2
     });
 
-    //var designURL = 'designs/Dino_Standard_Label_20x50mm_Examples-01.svg';
-
+    /** Fetch design name from query string **/
     var designURL =
         getQueryStringValue("design") || "designs/Dino_Optimized.svg";
+
+    /** Fetch design name from session storage **/
+    // var designURL =
+    //     sessionStorage.getItem("design") || "designs/Dino_Optimized.svg";
+
 
     //Create canvas
     DesignTemplate.createCanvas("canvas");
@@ -203,8 +207,13 @@ $(document).ready(function () {
             url: designURL
         },
         function () {
+            /** Fetch design name from query string **/
             var firstName = getQueryStringValue("firstName");
             var lastName = getQueryStringValue("lastName");
+
+            /** Fetch design name from session storage **/
+            // var firstName = sessionStorage.getItem("firstName");
+            // var lastName = sessionStorage.getItem("lastName");
             if (firstName && lastName) {
                 let texts = [firstName, lastName];
                 texts.filter(function (text, index) {
@@ -297,6 +306,12 @@ $(document).ready(function () {
             design: "designs/Sample_Design.svg"
         };
 
+        /** Using Query String**/
+
+        /* 
+            Reload page with new query string containing information
+            about new design name, firstname & lastname changes
+        */
         window.location.href =
             window.location.pathname +
             "?" +
@@ -305,6 +320,13 @@ $(document).ready(function () {
                 firstName: DesignTemplate.designTexts[0],
                 lastName: DesignTemplate.designTexts[1]
             });
+
+        /** End **/
+
+        /** Using Session storage **/
+        //store new design to load in session storage
+        // sessionStorage.setItem("design", "designs/Sample_Design.svg");
+        // window.location.href = window.location.pathname;
     });
 
     $('#product-color').on('changeColor', function (event) {
