@@ -52,7 +52,7 @@ var DesignTemplate = (function () {
         createCanvas: function (canvasId) {
             if (!canvasId || !document.getElementById(canvasId))
                 throw new Error("Canvas element not found");
-            this.canvas = new fabric.StaticCanvas(canvasId, {
+            this.canvas = new fabric.Canvas(canvasId, {
                 height: this.defaultHeight,
                 width: this.defaultWidth,
                 selection: false,
@@ -147,7 +147,6 @@ var DesignTemplate = (function () {
         changeFontFamily: function (fontFamily, callback) {
             var group = this.canvas.getObjects()[0];
             this.textObjectInfo.filter(function (obj) {
-                //obj.canvasObj.text = obj.text;
                 obj.canvasObj.fontFamily = fontFamily;
             });
             group.set("dirty", true);
@@ -174,13 +173,11 @@ var DesignTemplate = (function () {
         */
         resizeText: function (id) {
             var self = this;
-            // var changed = true;
             this.textObjectInfo.filter(function (obj) {
                 if (obj.canvasObj.id == id) {
                     var width = obj.canvasObj.width;
                     var ratio = self.maxTextWidth / width;
                     if (width > self.maxTextWidth) {
-                        //changed = true;
                         obj.canvasObj.scaleToWidth(self.maxTextWidth);
                         // obj.canvasObj.scaleX = ratio * obj.scaleX;
                         obj.canvasObj.scaleY = ratio * obj.scaleY;
@@ -189,31 +186,57 @@ var DesignTemplate = (function () {
                         obj.left +
                         obj.width / 2 -
                         obj.canvasObj.getScaledWidth() / 2;
+                    obj.canvasObj.dirty = true;
+
                 }
             });
-            // if (changed) {
             var group = self.canvas.getObjects()[0];
             group.set("dirty", true);
-            self.canvas.backgroundColor = self.canvas.backgroundColor;
             self.canvas.renderAll();
-            // }
         },
 
         resetTextSize: function (callback) {
+            // var self = this;
+            // this.textObjectInfo.filter(function (obj) {
+            //     obj.canvasObj.scaleX = obj.scaleX;
+            //     obj.canvasObj.scaleY = obj.scaleY;
+            //     var width = obj.canvasObj.width;
+            //     if (width > self.maxTextWidth) {
+            //         obj.canvasObj.scaleX =
+            //             (self.maxTextWidth / width) * obj.scaleX;
+            //     }
+            // });
+            // var group = self.canvas.getObjects()[0];
+            // group.set("dirty", true);
+            // self.canvas.renderAll();
+            // callback && callback();
+
             var self = this;
             this.textObjectInfo.filter(function (obj) {
-                obj.canvasObj.scaleX = obj.scaleX;
-                obj.canvasObj.scaleY = obj.scaleY;
                 var width = obj.canvasObj.width;
+                var ratio = self.maxTextWidth / width;
                 if (width > self.maxTextWidth) {
-                    obj.canvasObj.scaleX =
-                        (self.maxTextWidth / width) * obj.scaleX;
+                    obj.canvasObj.scaleToWidth(self.maxTextWidth);
+                    obj.canvasObj.scaleY = ratio * obj.scaleY;
                 }
+                obj.canvasObj.left =
+                    obj.left +
+                    obj.width / 2 -
+                    obj.canvasObj.getScaledWidth() / 2;
             });
             var group = self.canvas.getObjects()[0];
+            this.reScaleGroup();
             group.set("dirty", true);
             self.canvas.renderAll();
-            callback && callback();
+        },
+
+        reScaleGroup: function (scale) {
+            scale = scale ? scale : 0.7;
+            var group = this.canvas.getObjects()[0];
+            group.scale(1);
+            this.canvas.renderAll();
+            group.scale(scale);
+            this.canvas.renderAll();
         },
 
         //export canvas as data URL
@@ -241,13 +264,43 @@ var DesignTemplate = (function () {
                     options.designTexts.filter(function (text, index) {
                         self.changeText(index + 1, text);
                     });
+                    self.resetTextSize();
                 }
             );
         },
 
         changeBackgroundColor: function (color) {
+            this.backgroundColor = color;
             this.canvas.backgroundColor = color;
             this.canvas.renderAll();
-        }
+        },
+
+        // changeTemplateText: function (textArray) {
+        //     var self = this;
+        //     textArray.filter(function (text, index) {
+        //         DesignTemplate.textObjectInfo.filter(function (item) {
+        //             if (item.canvasObj.id == index + 1) {
+        //                 item.canvasObj.text = text;
+        //                 self.designTexts[index] = text;
+        //             }
+        //             self.canvas.renderAll();
+        //             var width = item.canvasObj.width;
+        //             var ratio = self.maxTextWidth / width;
+        //             if (width > self.maxTextWidth) {
+        //                 item.canvasObj.scaleToWidth(self.maxTextWidth);
+        //                 item.canvasObj.scaleY = ratio * item.scaleY;
+        //             }
+        //             item.canvasObj.left =
+        //                 item.left +
+        //                 item.width / 2 -
+        //                 item.canvasObj.getScaledWidth() / 2;
+        //         });
+        //     });
+
+        //     var group = self.canvas.getObjects()[0];
+        //     group.set("dirty", true);
+        //     self.canvas.backgroundColor = self.backgroundColor;
+        //     self.canvas.renderAll();
+        // }
     };
 })();

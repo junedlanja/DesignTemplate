@@ -31,7 +31,9 @@ function selectDefaultFontFamily() {
         "selected",
         true
     );
-    var fontOption = $('#font-slider .font-option[data-font="' + defaultFontFamily + '"]');
+    var fontOption = $(
+        '#font-slider .font-option[data-font="' + defaultFontFamily + '"]'
+    );
     fontOption.addClass("selected");
     $("#font-slider").slick("slickGoTo", fontOption.data("slide-id"));
 }
@@ -182,7 +184,7 @@ $(document).ready(function () {
     $("#design-loader").html("Loading...");
 
     //Initialize color picker
-    $('#product-color').colorpicker();
+    $("#product-color").colorpicker();
 
     $("#font-slider").slick({
         infinite: true,
@@ -197,7 +199,6 @@ $(document).ready(function () {
     /** Fetch design name from session storage **/
     // var designURL =
     //     sessionStorage.getItem("design") || "designs/Dino_Optimized.svg";
-
 
     //Create canvas
     DesignTemplate.createCanvas("canvas");
@@ -220,6 +221,7 @@ $(document).ready(function () {
                     DesignTemplate.changeText(index + 1, text);
                 });
             }
+            DesignTemplate.resetTextSize();
             $("#design-loader").html("Ready to desing !!!");
             renderTextOptions(true);
             renderColorOptions();
@@ -253,7 +255,7 @@ $(document).ready(function () {
     //change font family - slider
     $("#font-slider .font-option").on("click", function (event) {
         var $target = $(event.currentTarget);
-        var fontFamily = $target.data('font');
+        var fontFamily = $target.data("font");
         loadFonts(
             fontFamily,
             function () {
@@ -329,15 +331,15 @@ $(document).ready(function () {
         // window.location.href = window.location.pathname;
     });
 
-    $('#product-color').on('changeColor', function (event) {
+    $("#product-color").on("changeColor", function (event) {
         var color = event.color.toString();
-        $('.selected-product-color').css('background-color', color);
+        $(".selected-product-color").css("background-color", color);
         DesignTemplate.changeBackgroundColor(color);
     });
 
-    $('#product-color-panel').on('click', '.color-option', function (e) {
-        var color = $(e.currentTarget).data('color');
-        $('.selected-product-color').css('background-color', color);
+    $("#product-color-panel").on("click", ".color-option", function (e) {
+        var color = $(e.currentTarget).data("color");
+        $(".selected-product-color").css("background-color", color);
         DesignTemplate.changeBackgroundColor(color);
-    })
+    });
 });
